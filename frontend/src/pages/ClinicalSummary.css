@@ -1,0 +1,295 @@
+.summary-page {
+  min-height: 100vh;
+  background: #f4f8f6;
+  color: #172033;
+}
+
+.summary-header {
+  height: 78px;
+  padding: 0 7%;
+  background: white;
+  border-bottom: 1px solid #dfe9e5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.summary-logo {
+  font-size: 24px;
+  font-weight: 800;
+  color: #17382f;
+}
+
+.summary-logo span {
+  color: #0f9d68;
+  margin-right: 7px;
+}
+
+.summary-team {
+  color: #687671;
+}
+
+.summary-team strong {
+  color: #0f9d68;
+}
+
+.summary-container {
+  width: min(1000px, 92%);
+  margin: auto;
+  padding: 50px 0;
+}
+
+.summary-title {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.summary-badge {
+  display: inline-block;
+  padding: 8px 15px;
+  border-radius: 20px;
+  background: #e2f7ee;
+  color: #087f55;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+}
+
+.summary-title h1 {
+  margin: 15px 0 10px;
+  font-size: 38px;
+  font-weight: 850;
+  color: #172033;
+}
+
+.summary-title p {
+  color: #687671;
+  font-size: 16px;
+}
+
+/* =========================
+   SUMMARY CARDS
+========================= */
+
+.summary-card {
+  background: white;
+  border-radius: 18px;
+  padding: 26px;
+  margin-bottom: 20px;
+  border: 1px solid #e0ebe6;
+  box-shadow: 0 8px 25px rgba(30, 80, 60, 0.05);
+}
+
+/* VERY BOLD HEADINGS */
+
+.summary-card h2 {
+  margin: 0 0 22px;
+  color: #172033 !important;
+  font-size: 20px;
+  font-weight: 900 !important;
+  letter-spacing: 0.1px;
+  border-left: 5px solid #0f9d68;
+  padding-left: 12px;
+}
+
+/* =========================
+   PATIENT
+========================= */
+
+.patient-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.field-label {
+  display: block;
+  font-size: 12px;
+  color: #788681;
+  font-weight: 600;
+  margin-bottom: 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.patient-grid strong,
+.hpi-grid strong,
+.medical-grid strong {
+  color: #172033;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.summary-content {
+  padding: 16px;
+  background: #f4faf7;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #27342f;
+}
+
+.hpi-grid,
+.medical-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+/* =========================
+   DOCUMENT ACTION
+========================= */
+
+.document-action-card {
+  background: linear-gradient(135deg, #eaf9f2, #ffffff);
+  border: 1px solid #bdebd7;
+  border-radius: 18px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 25px 0;
+}
+
+.document-action-icon {
+  width: 55px;
+  height: 55px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #0f9d68;
+  color: white;
+  font-size: 25px;
+}
+
+.document-action-text {
+  flex: 1;
+}
+
+.document-action-text h2 {
+  margin: 0 0 5px;
+  font-size: 18px;
+  font-weight: 850;
+}
+
+.document-action-text p {
+  margin: 0;
+  color: #6b7874;
+}
+
+.scan-document-button,
+.send-doctor-button {
+  border: none;
+  border-radius: 10px;
+  padding: 13px 19px;
+  background: #0f9d68;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.scan-document-button:hover,
+.send-doctor-button:hover {
+  background: #087f55;
+}
+
+/* =========================
+   NOTICE
+========================= */
+
+.summary-notice {
+  display: flex;
+  gap: 15px;
+  padding: 18px;
+  background: #fff9e6;
+  border: 1px solid #f1df9a;
+  border-radius: 13px;
+  margin-top: 25px;
+}
+
+.summary-notice > span {
+  font-size: 25px;
+}
+
+.summary-notice strong {
+  color: #735b00;
+  font-weight: 900;
+}
+
+.summary-notice p {
+  margin: 6px 0 0;
+  color: #6e6541;
+  line-height: 1.5;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.summary-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.edit-summary-button {
+  border: 1px solid #b9c9c3;
+  background: white;
+  color: #26352f;
+  border-radius: 10px;
+  padding: 14px 22px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.summary-footer {
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #dfe9e5;
+  color: #75817d;
+  font-size: 13px;
+}
+
+.summary-footer span {
+  margin: 0 8px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 800px) {
+  .patient-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .document-action-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .patient-grid,
+  .hpi-grid,
+  .medical-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-title h1 {
+    font-size: 30px;
+  }
+
+  .summary-actions {
+    flex-direction: column;
+  }
+}
