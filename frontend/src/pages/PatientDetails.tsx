@@ -43,6 +43,7 @@ function PatientDetails({ onComplete }: PatientDetailsProps) {
   return (
     <div className="patient-page">
 
+      {/* HEADER */}
       <header className="patient-header">
         <div className="patient-logo">
           <span>✚</span> MediKiosk
@@ -53,8 +54,10 @@ function PatientDetails({ onComplete }: PatientDetailsProps) {
         </div>
       </header>
 
+      {/* MAIN CONTENT */}
       <main className="patient-container">
 
+        {/* TITLE */}
         <div className="patient-title">
           <span className="patient-badge">
             PATIENT REGISTRATION
@@ -63,13 +66,15 @@ function PatientDetails({ onComplete }: PatientDetailsProps) {
           <h1>Tell us about yourself</h1>
 
           <p>
-            This information helps MediKiosk create your
-            personalized clinical history.
+            This information helps MediKiosk create
+            your personalized clinical history.
           </p>
         </div>
 
+        {/* FORM CARD */}
         <div className="patient-card">
 
+          {/* FULL NAME */}
           <div className="form-group">
             <label>Full Name</label>
 
@@ -81,6 +86,7 @@ function PatientDetails({ onComplete }: PatientDetailsProps) {
             />
           </div>
 
+          {/* AGE + GENDER */}
           <div className="form-row">
 
             <div className="form-group">
@@ -89,6 +95,8 @@ function PatientDetails({ onComplete }: PatientDetailsProps) {
               <input
                 type="number"
                 placeholder="Age"
+                min="1"
+                max="120"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
               />
@@ -110,6 +118,7 @@ function PatientDetails({ onComplete }: PatientDetailsProps) {
 
           </div>
 
+          {/* LANGUAGE */}
           <div className="form-group">
             <label>Preferred Language</label>
 
@@ -123,6 +132,7 @@ function PatientDetails({ onComplete }: PatientDetailsProps) {
             </select>
           </div>
 
+          {/* CONSENT */}
           <label className="consent-row">
 
             <input
@@ -138,6 +148,7 @@ function PatientDetails({ onComplete }: PatientDetailsProps) {
 
           </label>
 
+          {/* CONTINUE BUTTON */}
           <button
             className="continue-button"
             onClick={handleContinue}
@@ -146,14 +157,19 @@ function PatientDetails({ onComplete }: PatientDetailsProps) {
           </button>
 
         </div>
-
       </main>
 
+      {/* FOOTER */}
       <footer className="patient-footer">
-        🔒 Your information is handled securely
-        <span>•</span>
+        <span>🔒</span>
+        Your information is handled securely
+
+        <span className="footer-dot">•</span>
+
         SIH26047
-        <span>•</span>
+
+        <span className="footer-dot">•</span>
+
         Team NextGen
       </footer>
 

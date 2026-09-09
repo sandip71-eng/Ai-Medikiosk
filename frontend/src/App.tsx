@@ -1,10 +1,24 @@
 import { useState } from "react";
+
 import "./App.css";
 
 import PatientDetails from "./pages/PatientDetails";
 import Consultation from "./pages/Consultation";
 import ClinicalSummary from "./pages/ClinicalSummary";
 import DocumentUpload from "./pages/DocumentUpload";
+
+
+/* =========================================
+   TYPES
+========================================= */
+
+type Screen =
+  | "welcome"
+  | "patient"
+  | "consultation"
+  | "summary"
+  | "documents";
+
 
 interface Patient {
   name: string;
@@ -14,210 +28,236 @@ interface Patient {
   consent: boolean;
 }
 
-export interface ClinicalData {
+
+interface ClinicalData {
   complaint: string;
   duration: string;
   severity: string;
   symptoms: string;
-  previousHistory: string;
+  previousProblem: string;
   medicines: string;
   allergies: string;
 }
 
-type Screen =
-  | "welcome"
-  | "patient"
-  | "consultation"
-  | "summary"
-  | "documents";
+
+/* =========================================
+   APP
+========================================= */
 
 function App() {
+
   const [screen, setScreen] = useState<Screen>("welcome");
 
   const [patient, setPatient] = useState<Patient | null>(null);
 
-  const [clinicalData, setClinicalData] = useState<ClinicalData>({
-    complaint: "",
-    duration: "",
-    severity: "",
-    symptoms: "",
-    previousHistory: "",
-    medicines: "",
-    allergies: "",
-  });
+  const [clinicalData, setClinicalData] =
+    useState<ClinicalData | null>(null);
 
-  const handlePatientComplete = (data: Patient) => {
-    setPatient(data);
-    setScreen("consultation");
-  };
 
-  const handleConsultationComplete = (data: ClinicalData) => {
-    setClinicalData(data);
-    setScreen("summary");
-  };
+  /* =========================================
+     WELCOME PAGE
+  ========================================= */
 
-  return (
-    <>
-      {screen === "welcome" && (
-        <div className="welcome-page">
+  if (screen === "welcome") {
 
-          <header className="welcome-header">
-            <div className="logo">
-              <span>✚</span> MediKiosk
+    return (
+      <div className="app">
+
+        {/* HEADER */}
+        <header className="header">
+
+          <div className="logo">
+            <span>✚</span>
+            MediKiosk
+          </div>
+
+          <div className="team">
+            Team <strong>NextGen</strong>
+          </div>
+
+        </header>
+
+
+        {/* HERO */}
+        <main className="hero">
+
+          <div className="hero-content">
+
+            <div className="hero-badge">
+              AI-POWERED CLINICAL INTAKE
             </div>
 
-            <div className="team-name">
-              Team <strong>NextGen</strong>
+
+            <h1>
+              Your Health.
+              <br />
+              <span>Our Intelligence.</span>
+            </h1>
+
+
+            <p>
+              A smarter way to share your health history
+              before meeting your doctor.
+            </p>
+
+
+            <div className="hero-buttons">
+
+              <button
+                className="primary-button"
+                onClick={() => setScreen("patient")}
+              >
+                Start Consultation →
+              </button>
+
+
+              <button
+                className="secondary-button"
+                onClick={() => setScreen("patient")}
+              >
+                हिंदी में शुरू करें
+              </button>
+
             </div>
-          </header>
 
-          <main className="hero-section">
 
-            <div className="hero-content">
+            <div className="features">
 
-              <div className="hero-badge">
-                AI-POWERED CLINICAL INTAKE
+              <div>
+                <span>🎤</span>
+                Voice
               </div>
 
-              <h1>
-                Your Health.
-                <br />
-                <span>Our Intelligence.</span>
-              </h1>
-
-              <p>
-                MediKiosk uses AI, voice interaction and document
-                intelligence to prepare a structured clinical history
-                before your doctor consultation.
-              </p>
-
-              <div className="hero-buttons">
-
-                <button
-                  className="start-button"
-                  onClick={() => setScreen("patient")}
-                >
-                  Start Consultation →
-                </button>
-
-                <button
-                  className="hindi-button"
-                  onClick={() => setScreen("patient")}
-                >
-                  हिंदी में शुरू करें
-                </button>
-
+              <div>
+                <span>👆</span>
+                Touch
               </div>
 
-              <div className="feature-row">
-
-                <div className="feature">
-                  <div className="feature-icon">🎙️</div>
-                  <div>
-                    <strong>Voice</strong>
-                    <span>Natural conversation</span>
-                  </div>
-                </div>
-
-                <div className="feature">
-                  <div className="feature-icon">👆</div>
-                  <div>
-                    <strong>Touch</strong>
-                    <span>Easy interaction</span>
-                  </div>
-                </div>
-
-                <div className="feature">
-                  <div className="feature-icon">🤖</div>
-                  <div>
-                    <strong>AI + OCR</strong>
-                    <span>Smart medical records</span>
-                  </div>
-                </div>
-
+              <div>
+                <span>🤖</span>
+                AI + OCR
               </div>
 
             </div>
 
-            <div className="kiosk-container">
+          </div>
 
-              <div className="kiosk-glow"></div>
+        </main>
 
-              <div className="kiosk">
 
-                <div className="kiosk-screen">
+        {/* FOOTER */}
+        <footer className="footer">
 
-                  <div className="screen-top">
-                    <span>✚</span>
-                    MediKiosk
-                  </div>
+          Smart India Hackathon 2026
 
-                  <div className="screen-icon">
-                    🩺
-                  </div>
+          <span>•</span>
 
-                  <div className="screen-title">
-                    How are you feeling today?
-                  </div>
+          SIH26047
 
-                  <div className="screen-line"></div>
-                  <div className="screen-line short"></div>
+          <span>•</span>
 
-                  <div className="screen-button">
-                    🎙️ Speak with MediKiosk
-                  </div>
+          Team NextGen
 
-                </div>
+        </footer>
 
-                <div className="kiosk-base">
-                  <div className="kiosk-slot"></div>
-                </div>
+      </div>
+    );
+  }
 
-              </div>
 
-            </div>
+  /* =========================================
+     PATIENT DETAILS
+  ========================================= */
 
-          </main>
+  if (screen === "patient") {
 
-          <footer className="welcome-footer">
-            <span>Smart India Hackathon 2026</span>
-            <span>•</span>
-            <span>SIH26047</span>
-            <span>•</span>
-            <span>Team NextGen</span>
-          </footer>
+    return (
+      <PatientDetails
+        onComplete={(data) => {
 
-        </div>
-      )}
+          setPatient(data);
 
-      {screen === "patient" && (
-        <PatientDetails
-          onComplete={handlePatientComplete}
-        />
-      )}
+          setScreen("consultation");
 
-      {screen === "consultation" && patient && (
-        <Consultation
-          patient={patient}
-          onComplete={handleConsultationComplete}
-        />
-      )}
+        }}
+      />
+    );
+  }
 
-      {screen === "summary" && patient && (
-        <ClinicalSummary
-          patient={patient}
-          clinicalData={clinicalData}
-          onDocuments={() => setScreen("documents")}
-        />
-      )}
 
-      {screen === "documents" && (
-        <DocumentUpload
-          onComplete={() => setScreen("summary")}
-        />
-      )}
-    </>
-  );
+  /* =========================================
+     CONSULTATION
+  ========================================= */
+
+  if (screen === "consultation") {
+
+    // Patient details must exist before consultation
+    if (!patient) {
+
+      setScreen("patient");
+
+      return null;
+    }
+
+
+    return (
+      <Consultation
+
+        patient={patient}
+
+        onComplete={(data) => {
+
+          setClinicalData(data);
+
+          setScreen("summary");
+
+        }}
+
+      />
+    );
+  }
+
+
+  /* =========================================
+     CLINICAL SUMMARY
+  ========================================= */
+
+  if (screen === "summary") {
+
+    if (!patient || !clinicalData) {
+
+      setScreen("patient");
+
+      return null;
+    }
+
+
+    return (
+      <ClinicalSummary
+        patient={patient}
+        clinicalData={clinicalData}
+        onDocuments={() => setScreen("documents")}
+      />
+    );
+  }
+
+
+  /* =========================================
+     DOCUMENT UPLOAD
+  ========================================= */
+
+  if (screen === "documents") {
+
+    return (
+      <DocumentUpload
+        onComplete={() => setScreen("summary")}
+      />
+    );
+  }
+
+
+  return null;
 }
+
 
 export default App;

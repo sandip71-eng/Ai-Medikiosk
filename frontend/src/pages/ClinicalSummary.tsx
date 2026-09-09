@@ -1,12 +1,21 @@
 import "./ClinicalSummary.css";
-import type { ClinicalData } from "../App";
 
 interface Patient {
   name: string;
   age: string;
   gender: string;
   language: string;
-  consent: boolean;
+  consent?: boolean;
+}
+
+interface ClinicalData {
+  complaint: string;
+  duration: string;
+  severity: string;
+  symptoms: string;
+  previousProblem: string;
+  medicines: string;
+  allergies: string;
 }
 
 interface ClinicalSummaryProps {
@@ -20,127 +29,152 @@ function ClinicalSummary({
   clinicalData,
   onDocuments,
 }: ClinicalSummaryProps) {
-
   return (
     <div className="summary-page">
 
+      {/* HEADER */}
       <header className="summary-header">
-
         <div className="summary-logo">
-          <span>✚</span> MediKiosk
+          <span>✚</span>
+          MediKiosk
         </div>
 
         <div className="summary-team">
           Team <strong>NextGen</strong>
         </div>
-
       </header>
 
+      {/* MAIN */}
       <main className="summary-container">
 
+        {/* TITLE */}
         <div className="summary-title">
-
           <span className="summary-badge">
-            AI CLINICAL SUMMARY
+            CLINICAL SUMMARY
           </span>
 
-          <h1>History Collection Completed</h1>
+          <h1>Your Health Summary</h1>
 
           <p>
-            MediKiosk has successfully structured the information
-            collected during your consultation.
+            Your responses have been organized into a structured
+            clinical history for healthcare review.
           </p>
-
         </div>
 
         {/* PATIENT INFORMATION */}
-
         <section className="summary-card">
 
-          <h2>Patient Information</h2>
+          <div className="section-heading">
+            <span className="heading-line"></span>
+            <h2>Patient Information</h2>
+          </div>
 
-          <div className="patient-grid">
+          <div className="summary-grid">
 
-            <div>
-              <span className="field-label">Full Name</span>
-              <strong>{patient.name || "Not provided"}</strong>
+            <div className="summary-item">
+              <span>FULL NAME</span>
+              <strong>
+                {patient.name || "Not provided"}
+              </strong>
             </div>
 
-            <div>
-              <span className="field-label">Age</span>
-              <strong>{patient.age || "Not provided"}</strong>
+            <div className="summary-item">
+              <span>AGE</span>
+              <strong>
+                {patient.age
+                  ? `${patient.age} years`
+                  : "Not provided"}
+              </strong>
             </div>
 
-            <div>
-              <span className="field-label">Gender</span>
-              <strong>{patient.gender || "Not provided"}</strong>
+            <div className="summary-item">
+              <span>GENDER</span>
+              <strong>
+                {patient.gender || "Not provided"}
+              </strong>
             </div>
 
-            <div>
-              <span className="field-label">Language</span>
-              <strong>{patient.language || "English"}</strong>
+            <div className="summary-item">
+              <span>PREFERRED LANGUAGE</span>
+              <strong>
+                {patient.language || "English"}
+              </strong>
             </div>
 
           </div>
-
         </section>
 
         {/* CHIEF COMPLAINT */}
-
         <section className="summary-card">
 
-          <h2>Chief Complaint</h2>
-
-          <div className="summary-content">
-            {clinicalData.complaint || "No complaint recorded."}
+          <div className="section-heading">
+            <span className="heading-line"></span>
+            <h2>Chief Complaint</h2>
           </div>
 
+          <div className="clinical-highlight">
+
+            <span className="clinical-label">
+              MAIN HEALTH PROBLEM
+            </span>
+
+            <strong>
+              {clinicalData.complaint || "Not provided"}
+            </strong>
+
+          </div>
         </section>
 
         {/* HISTORY OF PRESENT ILLNESS */}
-
         <section className="summary-card">
 
-          <h2>History of Present Illness</h2>
+          <div className="section-heading">
+            <span className="heading-line"></span>
+            <h2>History of Present Illness</h2>
+          </div>
 
-          <div className="hpi-grid">
+          <div className="summary-grid">
 
-            <div>
-              <span className="field-label">Duration</span>
+            <div className="summary-item">
+              <span>DURATION</span>
               <strong>
                 {clinicalData.duration || "Not provided"}
               </strong>
             </div>
 
-            <div>
-              <span className="field-label">Severity</span>
+            <div className="summary-item">
+              <span>SEVERITY</span>
               <strong>
                 {clinicalData.severity || "Not provided"}
               </strong>
             </div>
 
-            <div className="full-width">
-
-              <span className="field-label">
-                Associated Symptoms
-              </span>
-
+            <div className="summary-item full-width">
+              <span>OTHER SYMPTOMS</span>
               <strong>
-                {clinicalData.symptoms || "None reported"}
+                {clinicalData.symptoms ||
+                  "No additional symptoms provided"}
               </strong>
-
             </div>
 
-            <div className="full-width">
+          </div>
+        </section>
 
-              <span className="field-label">
-                Previous Similar Problem
-              </span>
+        {/* MEDICAL HISTORY */}
+        <section className="summary-card">
 
+          <div className="section-heading">
+            <span className="heading-line"></span>
+            <h2>Medical History</h2>
+          </div>
+
+          <div className="summary-grid">
+
+            <div className="summary-item full-width">
+              <span>PREVIOUS SIMILAR PROBLEM</span>
               <strong>
-                {clinicalData.previousHistory || "Not provided"}
+                {clinicalData.previousProblem || "No"}
               </strong>
-
             </div>
 
           </div>
@@ -148,50 +182,41 @@ function ClinicalSummary({
         </section>
 
         {/* MEDICAL INFORMATION */}
-
         <section className="summary-card">
 
-          <h2>Medical Information</h2>
+          <div className="section-heading">
+            <span className="heading-line"></span>
+            <h2>Medical Information</h2>
+          </div>
 
-          <div className="medical-grid">
+          <div className="summary-grid">
 
-            <div>
-
-              <span className="field-label">
-                Current Medicines
-              </span>
-
+            <div className="summary-item">
+              <span>CURRENT MEDICINES</span>
               <strong>
-                {clinicalData.medicines || "No medicines reported"}
+                {clinicalData.medicines || "No"}
               </strong>
-
             </div>
 
-            <div>
-
-              <span className="field-label">
-                Known Allergies
-              </span>
-
+            <div className="summary-item">
+              <span>KNOWN ALLERGIES</span>
               <strong>
-                {clinicalData.allergies || "No known allergies reported"}
+                {clinicalData.allergies || "No"}
               </strong>
-
             </div>
 
           </div>
 
         </section>
 
-        {/* DOCUMENT BUTTON */}
+        {/* MEDICAL DOCUMENTS */}
+        <section className="documents-card">
 
-        <section className="document-action-card">
-
-          <div className="document-action-icon">
+          <div className="documents-icon">
             📄
           </div>
 
-          <div className="document-action-text">
+          <div className="documents-content">
 
             <h2>Previous Medical Documents</h2>
 
@@ -203,7 +228,7 @@ function ClinicalSummary({
           </div>
 
           <button
-            className="scan-document-button"
+            className="documents-button"
             onClick={onDocuments}
           >
             Scan Medical Documents →
@@ -212,56 +237,73 @@ function ClinicalSummary({
         </section>
 
         {/* SAFETY NOTICE */}
+        <section className="safety-card">
 
-        <div className="summary-notice">
+          <div className="safety-icon">
+            ⚕
+          </div>
 
-          <span>⚕️</span>
+          <div className="safety-content">
 
-          <div>
-
-            <strong>Important Safety Notice</strong>
+            <h2>Important Safety Notice</h2>
 
             <p>
               This AI-generated summary is intended to assist
-              healthcare professionals. The information should be
-              reviewed and verified by a qualified doctor before
-              clinical decisions are made.
+              healthcare professionals. The information should
+              be reviewed and verified by a qualified doctor
+              before clinical decisions are made.
             </p>
 
           </div>
 
-        </div>
+        </section>
 
         {/* ACTIONS */}
-
         <div className="summary-actions">
 
           <button
-            className="edit-summary-button"
-            onClick={() => alert("Edit feature will be added next.")}
+            className="edit-button"
+            onClick={() => window.history.back()}
           >
             ✏️ Edit Information
           </button>
 
-          <button
-            className="send-doctor-button"
-            onClick={() => alert("Summary prepared for doctor review.")}
-          >
-            👨‍⚕️ Send to Doctor →
-          </button>
-
         </div>
+
+        {/* FINAL RESULT */}
+        <section className="final-result-card">
+
+          <div className="final-result-icon">
+            ✓
+          </div>
+
+          <div className="final-result-content">
+
+            <h2>Final Result</h2>
+
+            <p>
+              Your final medical result will appear here
+              after all clinical information and medical
+              documents have been reviewed.
+            </p>
+
+            <span className="final-result-status">
+              ⏳ Review Pending
+            </span>
+
+          </div>
+
+        </section>
 
       </main>
 
+      {/* FOOTER */}
       <footer className="summary-footer">
-
-        🔒 Secure Clinical Session
+        🔒 Your information is handled securely
         <span>•</span>
         SIH26047
         <span>•</span>
         Team NextGen
-
       </footer>
 
     </div>
