@@ -81,12 +81,13 @@ function DoctorPortal() {
     useState<"All" | "Pending" | "Reviewed">("All");
 
   const [review, setReview] = useState("");
+  const [prescription, setPrescription] = useState("");
   const [reviewSaved, setReviewSaved] = useState(false);
 
   /* ================= LOGIN ================= */
 
   const handleLogin = () => {
-    if (!doctorName || !specialization) {
+    if (!doctorName.trim() || !specialization) {
       alert("Please enter doctor name and specialization.");
       return;
     }
@@ -106,6 +107,7 @@ function DoctorPortal() {
   const openCase = (patient: PatientCase) => {
     setSelectedCase(patient);
     setReview("");
+    setPrescription("");
     setReviewSaved(false);
   };
 
@@ -114,6 +116,11 @@ function DoctorPortal() {
   const saveReview = () => {
     if (!review.trim()) {
       alert("Please enter your clinical review.");
+      return;
+    }
+
+    if (!prescription.trim()) {
+      alert("Please enter prescription / advice.");
       return;
     }
 
@@ -193,7 +200,9 @@ function DoctorPortal() {
                   <option>Prasuti & Stri Roga</option>
                   <option>Kaumarabhritya</option>
                   <option>Swasthavritta & Yoga</option>
-                  <option>Rasashastra & Bhaishajya Kalpana</option>
+                  <option>
+                    Rasashastra & Bhaishajya Kalpana
+                  </option>
                   <option>Dravyaguna</option>
                 </optgroup>
 
@@ -262,6 +271,7 @@ function DoctorPortal() {
           </div>
 
           <div className="doctor-header-right">
+
             <span>
               Dr. {doctorName} • {specialization}
             </span>
@@ -274,6 +284,7 @@ function DoctorPortal() {
             >
               Logout
             </button>
+
           </div>
 
         </header>
@@ -290,6 +301,7 @@ function DoctorPortal() {
           <div className="case-review-header">
 
             <div>
+
               <span className="doctor-badge">
                 PATIENT CASE REVIEW
               </span>
@@ -299,13 +311,17 @@ function DoctorPortal() {
               </h1>
 
               <p>
-                Case ID: MK-{selectedCase.id.toString().padStart(4, "0")}
+                Case ID: MK-
+                {selectedCase.id.toString().padStart(4, "0")}
               </p>
+
             </div>
 
             <span
               className={`case-status ${
-                selectedCase.status.toLowerCase()
+                reviewSaved
+                  ? "reviewed"
+                  : selectedCase.status.toLowerCase()
               }`}
             >
               {reviewSaved ? "Reviewed" : selectedCase.status}
@@ -330,7 +346,9 @@ function DoctorPortal() {
 
                 <div>
                   <span>Age</span>
-                  <strong>{selectedCase.age} years</strong>
+                  <strong>
+                    {selectedCase.age} years
+                  </strong>
                 </div>
 
                 <div>
@@ -354,21 +372,17 @@ function DoctorPortal() {
               <h2>🩺 Chief Complaint</h2>
 
               <h3>Main Problem</h3>
-
-              <p>
-                {selectedCase.complaint}
-              </p>
+              <p>{selectedCase.complaint}</p>
 
               <h3>Duration</h3>
-
-              <p>
-                {selectedCase.duration}
-              </p>
+              <p>{selectedCase.duration}</p>
 
               <h3>Severity</h3>
 
               <span
-                className={`severity ${selectedCase.severity.toLowerCase()}`}
+                className={`severity ${
+                  selectedCase.severity.toLowerCase()
+                }`}
               >
                 {selectedCase.severity}
               </span>
@@ -449,6 +463,7 @@ function DoctorPortal() {
                   Current medicines:{" "}
                   {selectedCase.medicines}
                   <br />
+
                   Known allergies:{" "}
                   {selectedCase.allergies}
                 </p>
@@ -505,13 +520,17 @@ function DoctorPortal() {
 
                 <div>
                   <span>Document Type</span>
+
                   <strong>
                     Medical Report
                   </strong>
                 </div>
 
                 <div>
-                  <span>Extracted Diagnosis / Finding</span>
+                  <span>
+                    Extracted Diagnosis / Finding
+                  </span>
+
                   <strong>
                     Relevant clinical findings available
                     for doctor review.
@@ -520,6 +539,7 @@ function DoctorPortal() {
 
                 <div>
                   <span>Medicines Detected</span>
+
                   <strong>
                     {selectedCase.medicines}
                   </strong>
@@ -553,20 +573,55 @@ function DoctorPortal() {
                 }
               />
 
-              <button
-                className="review-button"
-                onClick={saveReview}
-              >
-                Save Clinical Review ✓
-              </button>
+            </section>
 
-              {reviewSaved && (
-                <div className="review-success">
-                  ✓ Clinical review saved successfully.
-                </div>
-              )}
+            {/* PRESCRIPTION / ADVICE */}
+
+            <section className="case-card prescription-card">
+
+              <h2>💊 Prescription / Advice</h2>
+
+              <p className="review-description">
+                Enter prescribed medicines, dosage,
+                precautions and follow-up advice.
+              </p>
+
+              <textarea
+                rows={7}
+                placeholder={
+                  "Example:\n" +
+                  "• Medicine name and dosage\n" +
+                  "• Frequency / duration\n" +
+                  "• Dietary or lifestyle advice\n" +
+                  "• Follow-up instructions"
+                }
+                value={prescription}
+                onChange={(e) =>
+                  setPrescription(e.target.value)
+                }
+              />
 
             </section>
+
+          </div>
+
+          {/* SAVE BUTTON */}
+
+          <div className="review-action-area">
+
+            <button
+              className="review-button"
+              onClick={saveReview}
+            >
+              Save Clinical Review & Prescription ✓
+            </button>
+
+            {reviewSaved && (
+              <div className="review-success">
+                ✓ Clinical review and prescription saved
+                successfully.
+              </div>
+            )}
 
           </div>
 
@@ -579,7 +634,7 @@ function DoctorPortal() {
                 ✓
               </div>
 
-              <div>
+              <div className="final-result-content">
 
                 <span className="doctor-badge">
                   FINAL RESULT
@@ -591,15 +646,79 @@ function DoctorPortal() {
 
                 <p>
                   The patient's clinical history has been
-                  reviewed by Dr. {doctorName}. The final
-                  clinical decision and treatment plan will
-                  be based on professional medical assessment.
+                  reviewed by Dr. {doctorName}.
                 </p>
+
+                <div className="final-result-details">
+
+                  <div>
+                    <span>Patient</span>
+                    <strong>
+                      {selectedCase.name}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>Chief Complaint</span>
+                    <strong>
+                      {selectedCase.complaint}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>Doctor</span>
+                    <strong>
+                      Dr. {doctorName}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>Specialization</span>
+                    <strong>
+                      {specialization}
+                    </strong>
+                  </div>
+
+                </div>
+
+                <div className="final-review-box">
+
+                  <h3>
+                    📝 Doctor's Clinical Review
+                  </h3>
+
+                  <p>
+                    {review}
+                  </p>
+
+                </div>
+
+                <div className="final-prescription-box">
+
+                  <h3>
+                    💊 Prescription / Advice
+                  </h3>
+
+                  <p>
+                    {prescription}
+                  </p>
+
+                </div>
+
+                <div className="final-note">
+
+                  ⚕️ Final clinical decision and treatment
+                  plan are determined by the qualified
+                  healthcare professional.
+
+                </div>
 
               </div>
 
             </section>
           )}
+
+          {/* SAFETY NOTICE */}
 
           <div className="doctor-disclaimer">
 
@@ -655,6 +774,8 @@ function DoctorPortal() {
 
       <main className="dashboard-container">
 
+        {/* WELCOME */}
+
         <div className="dashboard-welcome">
 
           <div>
@@ -680,6 +801,7 @@ function DoctorPortal() {
             </div>
 
             <div>
+
               <strong>
                 Dr. {doctorName}
               </strong>
@@ -687,6 +809,7 @@ function DoctorPortal() {
               <span>
                 {specialization}
               </span>
+
             </div>
 
           </div>
@@ -699,12 +822,15 @@ function DoctorPortal() {
 
           <div className="stat-card">
             <span>👥</span>
-            <strong>{patientCases.length}</strong>
+            <strong>
+              {patientCases.length}
+            </strong>
             <p>Total Patients</p>
           </div>
 
           <div className="stat-card">
             <span>⏳</span>
+
             <strong>
               {
                 patientCases.filter(
@@ -712,11 +838,14 @@ function DoctorPortal() {
                 ).length
               }
             </strong>
+
             <p>Pending Cases</p>
           </div>
 
           <div className="stat-card">
+
             <span>✓</span>
+
             <strong>
               {
                 patientCases.filter(
@@ -724,30 +853,42 @@ function DoctorPortal() {
                 ).length
               }
             </strong>
+
             <p>Reviewed Cases</p>
+
           </div>
 
           <div className="stat-card">
+
             <span>📄</span>
-            <strong>{patientCases.length}</strong>
+
+            <strong>
+              {patientCases.length}
+            </strong>
+
             <p>Medical Reports</p>
+
           </div>
 
         </div>
 
-        {/* CASE LIST */}
+        {/* PATIENT CASES */}
 
         <section className="cases-section">
 
           <div className="section-header">
 
             <div>
-              <h2>Patient Cases</h2>
+
+              <h2>
+                Patient Cases
+              </h2>
 
               <p>
                 Review clinical histories submitted
                 through MediKiosk.
               </p>
+
             </div>
 
             <select
@@ -761,6 +902,7 @@ function DoctorPortal() {
                 )
               }
             >
+
               <option value="All">
                 All Cases
               </option>
@@ -772,6 +914,7 @@ function DoctorPortal() {
               <option value="Reviewed">
                 Reviewed
               </option>
+
             </select>
 
           </div>
@@ -779,11 +922,13 @@ function DoctorPortal() {
           <div className="cases-table">
 
             <div className="table-header">
+
               <span>Patient</span>
               <span>Complaint</span>
               <span>Severity</span>
               <span>Status</span>
               <span>Action</span>
+
             </div>
 
             {filteredCases.map((patient) => (
@@ -800,6 +945,7 @@ function DoctorPortal() {
                   </div>
 
                   <div>
+
                     <strong>
                       {patient.name}
                     </strong>
@@ -808,6 +954,7 @@ function DoctorPortal() {
                       {patient.age} yrs •{" "}
                       {patient.gender}
                     </span>
+
                   </div>
 
                 </div>
@@ -817,13 +964,17 @@ function DoctorPortal() {
                 </span>
 
                 <span
-                  className={`severity ${patient.severity.toLowerCase()}`}
+                  className={`severity ${
+                    patient.severity.toLowerCase()
+                  }`}
                 >
                   {patient.severity}
                 </span>
 
                 <span
-                  className={`case-status ${patient.status.toLowerCase()}`}
+                  className={`case-status ${
+                    patient.status.toLowerCase()
+                  }`}
                 >
                   {patient.status}
                 </span>
@@ -842,6 +993,8 @@ function DoctorPortal() {
           </div>
 
         </section>
+
+        {/* DISCLAIMER */}
 
         <div className="doctor-disclaimer">
 
