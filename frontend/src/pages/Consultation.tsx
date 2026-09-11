@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Consultation.css";
+import {
+  createConsultation,
+  sendConsultationMessage,
+} from "../api";
 
 interface Patient {
   name: string;
   age: string;
   gender: string;
   language: string;
+  consent: boolean;
 }
 
 interface ClinicalData {
@@ -20,6 +25,8 @@ interface ClinicalData {
 
 interface ConsultationProps {
   patient: Patient;
+  consultationId: string | null;
+  onConsultationCreated: (consultationId: string) => void;
   onComplete: (answers: ClinicalData) => void;
 }
 
@@ -30,6 +37,8 @@ interface Message {
 
 function Consultation({
   patient,
+  consultationId,
+  onConsultationCreated,
   onComplete,
 }: ConsultationProps) {
 
@@ -232,6 +241,10 @@ function Consultation({
   const [input, setInput] = useState("");
   const [listening, setListening] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [loading, setLoading] = useState(!consultationId);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
+  const [sessionAttempt, setSessionAttempt] = useState(0);
 
   const [answers, setAnswers] = useState<ClinicalData>({
     complaint: "",
@@ -243,14 +256,40 @@ function Consultation({
     allergies: "",
   });
 
+  useEffect(() => {
+    if (consultationId) {
+      return;
+    }
+
+    const languageCode = patient.language === "Hindi" ? "hi-IN" : patient.language === "Odia" ? "od-IN" : "en-IN";
+    createConsultation(
+      languageCode,
+      {
+        age: Number(patient.age),
+        gender: patient.gender.toLowerCase() as "male" | "female" | "other",
+        anonymous: true,
+      },
+      patient.consent,
+    )
+      .then((session) => {
+        onConsultationCreated(session.consultationId);
+        setMessages([{ type: "ai", text: session.initialMessage }]);
+      })
+      .catch((requestError: Error) => setError(requestError.message))
+      .finally(() => setLoading(false));
+  }, [consultationId, onConsultationCreated, patient, sessionAttempt]);
+
   // =========================
   // SEND MESSAGE
   // =========================
 
-  const sendMessage = (messageText: string) => {
-    if (!messageText.trim() || completed) {
+  const sendMessage = async (messageText: string) => {
+    if (!messageText.trim() || completed || sending || !consultationId) {
       return;
     }
+
+    setError("");
+    setSending(true);
 
     const updatedMessages: Message[] = [
       ...messages,
@@ -282,30 +321,24 @@ function Consultation({
 
     const nextStep = currentStep + 1;
 
-    if (nextStep < questions.length) {
-      updatedMessages.push({
-        type: "ai",
-        text: questions[nextStep],
-      });
-
-      setCurrentStep(nextStep);
-    } else {
-      updatedMessages.push({
-        type: "ai",
-        text: currentText.thankYou,
-      });
-
+    try {
+      const languageCode = patient.language === "Hindi" ? "hi-IN" : patient.language === "Odia" ? "od-IN" : "en-IN";
+      const turn = await sendConsultationMessage(consultationId, messageText, languageCode);
+      updatedMessages.push({ type: "ai", text: turn.message });
       setMessages(updatedMessages);
-      setCompleted(true);
-
-      onComplete(updatedAnswers);
-
       setInput("");
-      return;
-    }
 
-    setMessages(updatedMessages);
-    setInput("");
+      if (nextStep < questions.length) {
+        setCurrentStep(nextStep);
+      } else {
+        setCompleted(true);
+        onComplete(updatedAnswers);
+      }
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "Unable to send your answer.");
+    } finally {
+      setSending(false);
+    }
   };
 
   // =========================
@@ -348,6 +381,10 @@ function Consultation({
   // =========================
   // UI
   // =========================
+
+  if (loading) {
+    return <div className="consultation-page"><main className="consult-main"><section className="ai-section"><h1>Starting your secure consultation...</h1></section></main></div>;
+  }
 
   return (
     <div className="consultation-page">
@@ -467,6 +504,12 @@ function Consultation({
 
           </div>
 
+          {error && (
+            <p role="alert" className="voice-hint">
+              {error} <button type="button" onClick={() => { setError(""); setLoading(true); setSessionAttempt((attempt) => attempt + 1); }}>Retry</button>
+            </p>
+          )}
+
           {/* INPUT */}
 
           {!completed && (
@@ -525,8 +568,9 @@ function Consultation({
                 <button
                   className="send-button"
                   onClick={() => sendMessage(input)}
+                  disabled={sending}
                 >
-                  ➤
+                  {sending ? "..." : "➤"}
                 </button>
 
               </div>

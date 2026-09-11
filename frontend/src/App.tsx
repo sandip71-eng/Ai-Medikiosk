@@ -53,6 +53,8 @@ function App() {
   const [clinicalData, setClinicalData] =
     useState<ClinicalData | null>(null);
 
+  const [consultationId, setConsultationId] = useState<string | null>(null);
+
 
   /* =========================================
      WELCOME PAGE
@@ -177,6 +179,8 @@ function App() {
 
           setPatient(data);
 
+          setConsultationId(null);
+
           setScreen("consultation");
 
         }}
@@ -204,6 +208,8 @@ function App() {
       <Consultation
 
         patient={patient}
+        consultationId={consultationId}
+        onConsultationCreated={setConsultationId}
 
         onComplete={(data) => {
 
